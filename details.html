@@ -22,28 +22,51 @@
 			<div class="content-inner">
 				<div class="artical-details">
 					<h2><a href="#">Fundraiser Details</a></h2>
-					<div class="artical-details-info">
-						<div class="artical-details-info-left">
-							<a href="#"><img src="images/jz1.png" title="name" /></a>
-						</div>
-						<div class="artical-details-info-right">
-							<p><strong>Caption:</strong>test</p>
-							<p><strong>Organiser:</strong>test</p>
-							<p><strong>TargetFund:</strong>test</p>
-							<p><strong>CurrentFund:</strong>test</p>
-							<p><strong>City:</strong>test</p>
-							<p><strong>Status:</strong>test</p>
-							<p><strong>Category:</strong>test</p>
-							<div class="dicription">
-								<p><strong>Description :</strong>test</p>
-							</div>
-							<a class="donate" href="#">Donate</a>
-						</div>
+					<div id="content" class="artical-details-info">
 					</div>
 				</div>
 			</div>
 		</div>
 		</div>
+		<script>
+			(function() {
+				getId()
+			})()
+			function getId() {
+				var url = location.search;
+				if (url.indexOf("?") != -1) {
+					var text = url.substr(1);
+					ids = text.split("=");
+					getDetail(ids[1])
+				}
+			}
+			function getDetail(id) {
+				fetch('http://localhost:8999/fundraiser/' + id).then(res => {
+					return res.json()
+				}).then(response => {
+					const content = document.getElementById('content')
+					let html = `
+						<div class="artical-details-info-left">
+							<a href="#"><img src="`+ response[0].URL +`" title="name" /></a>
+						</div>
+						<div class="artical-details-info-right">
+							<p><strong>Caption:</strong>`+ response[0].CAPTION +`</p>
+							<p><strong>Organizer:</strong>`+ response[0].ORGANIZER +`</p>
+							<p><strong>TargetFund:</strong>`+ response[0].TARGET_FUNDING +`</p>
+							<p><strong>CurrentFund:</strong>`+ response[0].CURRENT_FUNDING +`</p>
+							<p><strong>City:</strong>`+ response[0].CITY +`</p>
+							<p><strong>Status:</strong>`+ (response[0].ACTIVE == 1 ? 'ACTIVE' : 'SUSPENDED') +`</p>
+							<p><strong>Category:</strong>` + response[0].NAME + `</p>
+							<div class="dicription">
+								<p><strong>Description :</strong>`+ response[0].DESCRIBE +`</p>
+							</div>
+							<a class="donate" href="#" onclick="alert('This feature is under construction')">Donate</a>
+						</div>
+					`
+					content.innerHTML = html
+				})
+			}
+		</script>
 	</body>
 </html>
 
