@@ -310,6 +310,16 @@ ul.options li a {
 	background: #FFF;
 }
 
+ul.options li.select a {
+	border: 1px solid red;
+	padding: 0.5em 1.2em;
+	font-size: 0.8em;
+	text-decoration: none;
+	display: block;
+	color: red;
+	background-color: lightpink;
+}
+
 ul.options li a:hover {
 	border: 1px solid #e74c3c;
 	color: #e74c3c;
@@ -389,6 +399,18 @@ ul.options li a:hover {
 	display: flex;
 	justify-content: space-between;
 	flex-wrap: wrap;
+}
+
+.fundaries-grids .none {
+	width: 800px;
+	height: 100px;
+	background-color: #e74c3c;
+	line-height: 100px;
+	text-align: center;
+	color: #c4eeff;
+	font-size: 30px;
+	font-weight: 900;
+	margin: 0 auto;
 }
 
 .fundaries-grid-pic img {
