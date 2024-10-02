@@ -18,64 +18,8 @@
 		</div>
 		<div class="content">
 			<div class="container">
-				<div class="content">
-					<div onclick="location.href='details.html';" class="artical">
-						<div class="artical-left">
-							<a href="#"><img src="images/jz1.png" title="post-name" /></a>
-						</div>
-						<div class="artical-right">
-							<div class="artical-head">
-								<h2><a href="#">Caption</a></h2>
-							</div>
-							<div class="artical-info">
-								<p><strong>Organiser:</strong> username</p>
-								<p><strong>TarrgetFund:</strong>$250 million</p>
-								<p><strong>CurrentFund:</strong>pop</p>
-								<p><strong>City:</strong>UK</p>
-								<p><strong>Status:</strong> adipiscing</p>
-								<p><strong>Category:</strong>sociis</p>
-							</div>
-						</div>
-						<div class="clearfix"> </div>
-					</div>
-					<div onclick="location.href='details.html';" class="artical">
-						<div class="artical-left">
-							<a href="#"><img src="images/jz2.png" title="post-name" /></a>
-						</div>
-						<div class="artical-right">
-							<div class="artical-head">
-								<h2><a href="#">Caption</a></h2>
-							</div>
-							<div class="artical-info">
-								<p><strong>Organiser:</strong> username</p>
-								<p><strong>TarrgetFund:</strong>$250 million</p>
-								<p><strong>CurrentFund:</strong>pop</p>
-								<p><strong>City:</strong>UK</p>
-								<p><strong>Status:</strong> adipiscing</p>
-								<p><strong>Category:</strong>sociis</p>
-							</div>
-						</div>
-						<div class="clearfix"> </div>
-					</div>
-					<div onclick="location.href='details.html';" class="artical">
-						<div class="artical-left">
-							<a href="#"><img src="images/jz3.png" title="post-name" /></a>
-						</div>
-						<div class="artical-right">
-							<div class="artical-head">
-								<h2><a href="#">Caption</a></h2>
-							</div>
-							<div class="artical-info">
-								<p><strong>Organiser:</strong> username</p>
-								<p><strong>TarrgetFund:</strong>$250 million</p>
-								<p><strong>CurrentFund:</strong>pop</p>
-								<p><strong>City:</strong>UK</p>
-								<p><strong>Status:</strong> adipiscing</p>
-								<p><strong>Category:</strong>sociis</p>
-							</div>
-						</div>
-						<div class="clearfix"> </div>
-					</div>
+				<div id="content" class="content">
+					
 				</div>
 			</div>
 		</div>
@@ -83,6 +27,48 @@
 			<img src="./images/1.png" alt="">
 			<p>Our hearts go out to everyone affected by these crises. We’re here to help.</p>
 		</div>
+		<script>
+			(function() {
+				getActiveFund()
+			})()
+			function getActiveFund() {
+				fetch('http://localhost:8999/search').then(res => {
+					return res.json()
+				}).then(response => {
+					const data = []
+					response.forEach(element => {
+						if (element.ACTIVE === 1 && data.length < 3) {
+							data.push(element)
+						}
+					});
+					const content = document.getElementById('content')
+					let html = ''
+					data.forEach(item => {
+						html += `
+							<div onclick="location.href='details.html?fundId=`+item.FUNDRAISER_ID+`';" class="artical">
+								<div class="artical-left">
+									<a href="#"><img src="`+ item.URL +`"/></a>
+								</div>
+								<div class="artical-right">
+									<div class="artical-head">
+										<h2><a href="#">`+ item.CAPTION +`</a></h2>
+									</div>
+									<div class="artical-info">
+										<p><strong>Organizer:</strong> `+ item.ORGANIZER +`</p>
+										<p><strong>TarrgetFund:</strong>$`+ item.TARGET_FUNDING +`</p>
+										<p><strong>CurrentFund:</strong>$`+ item.CURRENT_FUNDING +`</p>
+										<p><strong>City:</strong>`+ item.CITY +`</p>
+										<p><strong>Status:</strong>` + (item.ACTIVE == 1 ? 'ACTIVE' : 'SUSPENDED') + `</p>
+										<p><strong>Category:</strong>`+ item.NAME +`</p>
+									</div>
+								</div>
+							</div>
+						`
+					})
+					content.innerHTML = html
+				})
+			}
+		</script>
 	</body>
 </html>
 
