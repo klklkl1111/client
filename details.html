@@ -22,8 +22,9 @@
 			<div class="content-inner">
 				<div class="artical-details">
 					<h2><a href="#">Fundraiser Details</a></h2>
-					<div id="content" class="artical-details-info">
-					</div>
+					<div id="content" class="artical-details-info"></div>
+					<div class="user-title">List Of Donors</div>
+					<div id="user-list" class="user-list"></div>
 				</div>
 			</div>
 		</div>
@@ -38,6 +39,7 @@
 					var text = url.substr(1);
 					ids = text.split("=");
 					getDetail(ids[1])
+					getDonation(ids[1])
 				}
 			}
 			function getDetail(id) {
@@ -47,7 +49,7 @@
 					const content = document.getElementById('content')
 					let html = `
 						<div class="artical-details-info-left">
-							<a href="#"><img src="`+ response[0].URL +`" title="name" /></a>
+							<a href="#"><img src="`+ response[0].IMAGEURL +`" title="name" /></a>
 						</div>
 						<div class="artical-details-info-right">
 							<p><strong>Caption:</strong>`+ response[0].CAPTION +`</p>
@@ -60,10 +62,30 @@
 							<div class="dicription">
 								<p><strong>Description :</strong>`+ response[0].DESCRIBE +`</p>
 							</div>
-							<a class="donate" href="#" onclick="alert('This feature is under construction')">Donate</a>
+							<a class="donate" href="./donate.html?id=`+ id +`">Donate</a>
 						</div>
 					`
 					content.innerHTML = html
+				})
+			}
+			function getDonation(id) {
+				fetch('http://localhost:8999/donationList/' + id).then(res => {
+					return res.json()
+				}).then(response => {
+					const list = document.querySelector('#user-list')
+					let inner = ''
+					response.forEach(item => {
+						inner += `
+							<div class="item">
+								<div class="icon"></div>
+								<div class="info">
+									<div class="name">`+item.GIVER+`</div>
+									<div class="amount">$`+item.AMOUNT+`</div>
+								</div>
+							</div>
+						`
+					})
+					list.innerHTML = inner
 				})
 			}
 		</script>
